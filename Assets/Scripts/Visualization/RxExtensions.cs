@@ -4,11 +4,6 @@ using UnityEngine;
 
 public static class RxExtensions
 {
-    public static IObservable<T> LimitDuration<T>(this IObservable<T> observable, float duration)
-    {
-        return observable.TakeUntil(Observable.Timer(TimeSpan.FromSeconds(duration)));
-    }
-
     public static IObservable<RxMessageVisualizationData> Visualize(this IObservable<RxMessageVisualizationData> observable, string title = null)
     {
         return RxTimelineManager.Main.VisualizeObservable(observable, title);
