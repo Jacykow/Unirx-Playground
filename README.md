@@ -2,7 +2,7 @@
 A Unity playground for [UniRx](https://github.com/neuecc/UniRx "UniRx Repository") visualization inspired by [rxmarbles.com](https://rxmarbles.com/ "RxMarbles").
 
 ### Usage
-After downloading the source code simply press play on the [MainScene](../main/Assets/MainScene.unity). The default choice is a SelectMany visualization which is one of the prepared examples. Check out other prepared examples in the [Example](../main/Assets/Scripts/Examples/Example.cs) script. You can write your own examples in this class and select them by changing _exampleId_ in the inspector.
+After downloading the source code simply press play on the [MainScene](../main/Assets/MainScene.unity). The default choice is a SelectMany visualization which is one of the prepared examples. Check out other prepared examples in the [Example](../main/Assets/Scripts/Examples/Example.cs) script. You can write your own examples in this class and run them by changing _exampleId_ in the inspector.
 
 ![Select Many Example Visualization](https://github.com/Jacykow/Unirx-Playground/blob/main/select_many.png?raw=true "Select Many")
 
@@ -25,8 +25,10 @@ SomeObservable
     .Subscribe()
     .AddTo(RxTimelineManager.Main.DisposeBag);
 ```
-The conversion to ```IObservable<RxMessageVisualizationData>``` can be done easily via the ```AsVisualizationDataObservable``` extension method. Without any given parameters the color will be a random color chosen at the beginning and the shown number will be an increasing integer starting from 1. If you want to keep any of the information that was contained in the original message you need to provide a selector method that will extract it.
+The conversion to ```IObservable<RxMessageVisualizationData>``` can be done easily via the ```AsVisualizationDataObservable``` extension method. Without any given parameters the color will be a random color chosen at the beginning and the shown number will be an increasing integer starting from 1. If you want to keep any of the information that was contained in the original message you need to provide a selector method that will put it into the integer value or color of a message node.
 
-All subscriptions have to be destroyed at the end of the visualizations in order to stop displying incoming messages. This can be ensured by adding them to ```RxTimelineManager.Main.DisposeBag```.
+There is no need to catch any messages in the subscription since all callbacks are visualized but it can still be used for debug purposes. 
 
-All of this is necessary for the [RxTimelineManager](../main/Assets/Scripts/Visualization/RxTimelineManager.cs) to invoke the ```Do```, ```DoOnCompleted``` and ```DoOnError``` methods.
+All subscriptions have to be destroyed at the end of the visualization in order to stop displying incoming messages. This can be ensured by adding them to ```RxTimelineManager.Main.DisposeBag```.
+
+All of this is necessary for the [RxTimelineManager](../main/Assets/Scripts/Visualization/RxTimelineManager.cs) to properly invoke the ```Do```, ```DoOnCompleted``` and ```DoOnError``` methods and add put corresponding markers on correct timelines.
