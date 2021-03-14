@@ -4,6 +4,8 @@ A Unity playground for [UniRx](https://github.com/neuecc/UniRx "UniRx Repository
 ### Usage
 After downloading the source code simply press play on the [MainScene](../main/Assets/MainScene.unity). The default choice is a SelectMany visualization which is one of the prepared examples. Check out other prepared examples in the [Example](../main/Assets/Scripts/Examples/Example.cs) script. You can write your own examples in this class and select them by changing _exampleId_ in the inspector.
 
+![Select Many Example Visualization](https://raw.githubusercontent.com/Jacykow/Unirx-Playground/main/select_many.png "Select Many")
+
 ### How does this work?
 Observable usage normally would look something like this:
 ```csharp

@@ -45,7 +45,8 @@ public class Example : MonoBehaviour
 
     private void ExampleSelectMany()
     {
-        var baseTimer = Observable.Interval(TimeSpan.FromSeconds(0.2))
+        var baseTimer = Observable.Interval(TimeSpan.FromSeconds(1))
+            .Take(3)
             .AsVisualizationDataObservable()
             .Visualize("1 second interval");
         baseTimer.SelectMany(visualizationData =>
