@@ -21,6 +21,9 @@ public class Example : MonoBehaviour
             case 2:
                 ExampleSelectMany();
                 break;
+            case 3:
+                ExampleAsSingleUnitObservable();
+                break;
         }
     }
 
@@ -56,6 +59,18 @@ public class Example : MonoBehaviour
                 .AsVisualizationDataObservable()
                 .Visualize("0.8 second interval " + visualizationData.Value);
         }).Visualize("Select Many").Subscribe().AddTo(RxTimelineManager.Main.DisposeBag);
+    }
+
+    private void ExampleAsSingleUnitObservable()
+    {
+        Observable.Interval(TimeSpan.FromSeconds(1))
+            .Take(3)
+            .AsVisualizationDataObservable()
+            .Visualize("1 second interval")
+            .AsSingleUnitObservable()
+            .AsVisualizationDataObservable()
+            .Visualize("AsSingleUnitObservable 1 second interval")
+            .Subscribe().AddTo(RxTimelineManager.Main.DisposeBag);
     }
 
     private void VisualizeEmptyTimeline()
