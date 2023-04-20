@@ -27,7 +27,8 @@ public class RxTimelineManager : MonoBehaviour
         return observable
             .Do(value => timeline.CreateMarker(GetProgress(Time.time), RxMessageType.Next, value.Value, value.Color))
             .DoOnCompleted(() => timeline.CreateMarker(GetProgress(Time.time), RxMessageType.Completed))
-            .DoOnError(error => timeline.CreateMarker(GetProgress(Time.time), RxMessageType.Error));
+            .DoOnError(error => timeline.CreateMarker(GetProgress(Time.time), RxMessageType.Error))
+            .DoOnCancel(() => timeline.CreateMarker(GetProgress(Time.time), RxMessageType.Cancel));
     }
 
     private void Awake()

@@ -4,25 +4,28 @@ using UnityEngine;
 
 public class Example : MonoBehaviour
 {
-    public int exampleId;
+    [SerializeField] private ExampleType example;
 
     private void Start()
     {
         VisualizeEmptyTimeline();
 
-        switch (exampleId)
+        switch (example)
         {
-            case 0:
+            case ExampleType.Interval:
                 ExampleInterval();
                 break;
-            case 1:
+            case ExampleType.Merge:
                 ExampleMerge();
                 break;
-            case 2:
+            case ExampleType.SelectMany:
                 ExampleSelectMany();
                 break;
-            case 3:
-                ExampleAsSingleUnitObservable();
+            case ExampleType.SelectManyWithException:
+                ExampleSelectManyWithException();
+                break;
+            default:
+                VisualizeEmptyTimeline();
                 break;
         }
     }
@@ -49,7 +52,7 @@ public class Example : MonoBehaviour
     private void ExampleSelectMany()
     {
         var baseTimer = Observable.Interval(TimeSpan.FromSeconds(1))
-            .Take(3)
+            .Take(4)
             .AsVisualizationDataObservable()
             .Visualize("1 second interval");
         baseTimer.SelectMany(visualizationData =>
@@ -61,16 +64,20 @@ public class Example : MonoBehaviour
         }).Visualize("Select Many").Subscribe().AddTo(RxTimelineManager.Main.DisposeBag);
     }
 
-    private void ExampleAsSingleUnitObservable()
+    private void ExampleSelectManyWithException()
     {
-        Observable.Interval(TimeSpan.FromSeconds(1))
-            .Take(3)
+        var baseTimer = Observable.Interval(TimeSpan.FromSeconds(1))
+            .Take(4)
             .AsVisualizationDataObservable()
-            .Visualize("1 second interval")
-            .AsSingleUnitObservable()
-            .AsVisualizationDataObservable()
-            .Visualize("AsSingleUnitObservable 1 second interval")
-            .Subscribe().AddTo(RxTimelineManager.Main.DisposeBag);
+            .Visualize("1 second interval");
+        baseTimer.SelectMany(visualizationData =>
+        {
+            if (visualizationData.Value == 3) throw new Exception();
+            return Observable.Interval(TimeSpan.FromSeconds(0.8))
+                .Take(3)
+                .AsVisualizationDataObservable()
+                .Visualize("0.8 second interval " + visualizationData.Value);
+        }).Visualize("Select Many").Subscribe().AddTo(RxTimelineManager.Main.DisposeBag);
     }
 
     private void VisualizeEmptyTimeline()
@@ -78,5 +85,13 @@ public class Example : MonoBehaviour
         Observable.Never<Unit>()
             .AsVisualizationDataObservable()
             .Visualize("Empty timeline").Subscribe().AddTo(RxTimelineManager.Main.DisposeBag);
+    }
+
+    private enum ExampleType
+    {
+        Interval,
+        Merge,
+        SelectMany,
+        SelectManyWithException
     }
 }

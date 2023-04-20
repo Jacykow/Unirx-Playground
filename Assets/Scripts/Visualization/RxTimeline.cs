@@ -35,7 +35,8 @@ public class RxTimeline : MonoBehaviour
                 PlaceMarker(progress, messageMarker.GetComponent<RectTransform>());
                 break;
             case RxMessageType.Completed:
-                PlaceMarker(progress, Instantiate(completedPrefab, overlayMarkerContainer).GetComponent<RectTransform>());
+                PlaceMarker(progress,
+                    Instantiate(completedPrefab, overlayMarkerContainer).GetComponent<RectTransform>());
                 SetProgress(progress);
                 _updateProgress = false;
                 break;
@@ -44,10 +45,14 @@ public class RxTimeline : MonoBehaviour
                 SetProgress(progress);
                 _updateProgress = false;
                 break;
+            case RxMessageType.Cancel:
+                SetProgress(progress);
+                _updateProgress = false;
+                break;
         }
     }
 
-    public void PlaceMarker(float progress, RectTransform markerTransform)
+    private void PlaceMarker(float progress, RectTransform markerTransform)
     {
         var width = markerTransform.parent.GetComponent<RectTransform>().rect.width;
         var xPosition = progress * width;

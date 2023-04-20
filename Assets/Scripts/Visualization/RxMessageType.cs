@@ -2,5 +2,6 @@ public enum RxMessageType
 {
     Next,
     Completed,
-    Error
+    Error,
+    Cancel
 }
